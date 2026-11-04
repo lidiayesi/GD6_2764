@@ -5,6 +5,12 @@
 @section('content') 
     <a href="{{ route('konser.index') }}" class="btn btn-outline-secondary mb-3">&larr; Kembali ke 
 daftar</a> 
+
+@if ($konser['sisa'] == 0)
+    @include('partials.alert', ['tipe' => 'danger', 'pesan' => 'Maaf, tiket untuk konser ini sudah ludes terjual (Sold Out)!'])
+@elseif ($konser['sisa'] < 10)
+    @include('partials.alert', ['tipe' => 'warning', 'pesan' => 'Buruan war! Tiket hampir habis, sisa ' . $konser['sisa'] . ' tiket lagi.'])
+@endif
   
     <div class="card"> 
         <div class="card-body"> 
