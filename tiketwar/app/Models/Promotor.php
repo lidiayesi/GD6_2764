@@ -3,8 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
-class Promotor extends Model
-{
-    //
-}
+use Illuminate\Database\Eloquent\Relations\HasMany; 
+  
+class Promotor extends Model 
+{ 
+    protected $fillable = ['nama', 'kontak'];
+  
+    public function konsers(): HasMany
+    { 
+        return $this->hasMany(Konser::class); 
+    } 
+} 
