@@ -43,6 +43,7 @@
                 </td>
                 <td>
                     <a href="{{ route('konser.detail', ['id' => $konser->id]) }}" class="btn btn-sm btn-primary">Detail</a>
+                    <a href="{{ route('konser.edit', ['id' => $konser->id]) }}" class="btn btn-sm btn-warning">Edit</a>
                 </td>
             </tr>
         @empty
