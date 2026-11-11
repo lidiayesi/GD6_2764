@@ -5,15 +5,19 @@
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h1 class="mb-0">Daftar Konser</h1>
-    <form method="GET" action="{{ route('konser.index') }}" class="d-flex gap-2">
-        <select name="kota" class="form-select">
-            <option value="">Semua kota</option>
-            @foreach ($daftarKota as $kota)
-                <option value="{{ $kota }}" @selected(request('kota') == $kota)>{{ $kota }}</option>
-            @endforeach
-        </select>
-        <button type="submit" class="btn btn-primary">Filter</button>
-    </form>
+    
+    <div class="d-flex gap-3 align-items-center">
+        <form method="GET" action="{{ route('konser.index') }}" class="d-flex gap-2 mb-0">
+            <select name="kota" class="form-select">
+                <option value="">Semua kota</option>
+                @foreach ($daftarKota as $kota)
+                    <option value="{{ $kota }}" @selected(request('kota') == $kota)>{{ $kota }}</option>
+                @endforeach
+            </select>
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </form>
+        <a href="{{ route('konser.create') }}" class="btn btn-success">Tambah Konser</a>
+    </div>
 </div>
 
 <table class="table table-bordered">

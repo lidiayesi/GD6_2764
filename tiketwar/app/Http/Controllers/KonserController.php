@@ -44,7 +44,8 @@ class KonserController extends Controller
             'kota'        => ['required', 'string', 'max:100'], 
             'harga'       => ['required', 'integer', 'min:0'], 
             'sisa'        => ['required', 'integer', 'min:0'], 
-            'tanggal'     => ['required', 'date'], 
+            'tanggal'     => ['required', 'date'],
+            'deskripsi' => ['nullable', 'string'],
         ]); 
   
         Konser::create($data); 
@@ -71,7 +72,8 @@ class KonserController extends Controller
             'kota'        => ['required', 'string', 'max:100'], 
             'harga'       => ['required', 'integer', 'min:0'], 
             'sisa'        => ['required', 'integer', 'min:0'], 
-            'tanggal'     => ['required', 'date'], 
+            'tanggal'     => ['required', 'date'],
+            'deskripsi' => ['nullable', 'string'],
         ]); 
   
         $konser->update($data);

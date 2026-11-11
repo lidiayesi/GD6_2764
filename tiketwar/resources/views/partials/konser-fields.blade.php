@@ -14,7 +14,7 @@
         <div class="invalid-feedback">{{ $message }}</div> 
     @enderror 
 </div> 
-  
+ 
 <div class="mb-3"> 
     <label for="nama" class="form-label">Nama Konser</label> 
     <input type="text" name="nama" id="nama" 
@@ -24,7 +24,7 @@
         <div class="invalid-feedback">{{ $message }}</div> 
     @enderror 
 </div> 
-  
+ 
 <div class="mb-3"> 
     <label for="kota" class="form-label">Kota</label> 
     <input type="text" name="kota" id="kota" 
@@ -34,7 +34,7 @@
         <div class="invalid-feedback">{{ $message }}</div> 
     @enderror 
 </div> 
-  
+ 
 <div class="row"> 
     <div class="col-md-4 mb-3"> 
         <label for="harga" class="form-label">Harga (Rp)</label> 
@@ -58,9 +58,14 @@
         <label for="tanggal" class="form-label">Tanggal</label> 
         <input type="date" name="tanggal" id="tanggal" 
                class="form-control @error('tanggal') is-invalid @enderror" 
-               value="{{ old('tanggal', $konser->tanggal ?? '') }}">   
+               value="{{ old('tanggal', $konser->tanggal ?? '') }}">  
          @error('tanggal') 
             <div class="invalid-feedback">{{ $message }}</div> 
         @enderror 
     </div> 
-</div> 
+</div>
+
+<div class="mb-3">
+    <label for="deskripsi" class="form-label">Deskripsi Konser</label>
+    <textarea class="form-control" id="deskripsi" name="deskripsi">{{ old('deskripsi', $konser->deskripsi ?? '') }}</textarea>
+</div>
