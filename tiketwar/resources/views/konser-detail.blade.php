@@ -10,6 +10,12 @@
     @elseif ($konser->sisa < 10)
         @include('partials.alert', ['tipe' => 'warning', 'pesan' => 'Buruan war! Tiket hampir habis, sisa ' . $konser->sisa . ' tiket lagi.'])
     @endif
+
+    @if($konser->deskripsi)
+        <hr>
+        <h5>Deskripsi</h5>
+        <p>{{ $konser->deskripsi }}</p>
+    @endif
   
     <div class="card"> 
         <div class="card-body"> 

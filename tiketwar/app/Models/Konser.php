@@ -13,7 +13,8 @@ class Konser extends Model
         'kota', 
         'harga', 
         'sisa', 
-        'tanggal', 
+        'tanggal',
+        'deskripsi',
     ]; 
   
     public function promotor(): BelongsTo
