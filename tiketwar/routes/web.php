@@ -46,4 +46,10 @@ Route::get('/konser/{konser}/pesan', [PesananController::class, 'create'])
     ->whereNumber('konser')->name('pesanan.create');
 Route::post('/konser/{konser}/pesan', [PesananController::class, 'store'])
     ->whereNumber('konser')->name('pesanan.store');
+Route::get('/pesanan', [PesananController::class, 'index']) 
+    ->name('pesanan.index'); 
+Route::patch('/pesanan/{pesanan}/bayar', [PesananController::class, 'bayar']) 
+    ->whereNumber('pesanan')->name('pesanan.bayar'); 
+Route::patch('/pesanan/{pesanan}/batal', [PesananController::class, 'batal']) 
+    ->whereNumber('pesanan')->name('pesanan.batal');
 Route::view('/kontak', 'kontak')->name('kontak');
