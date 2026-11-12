@@ -1,5 +1,6 @@
 <?php 
 
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PesananController;
 use App\Http\Controllers\KonserController;
 use Illuminate\Support\Facades\Route;
@@ -52,4 +53,6 @@ Route::patch('/pesanan/{pesanan}/bayar', [PesananController::class, 'bayar'])
     ->whereNumber('pesanan')->name('pesanan.bayar'); 
 Route::patch('/pesanan/{pesanan}/batal', [PesananController::class, 'batal']) 
     ->whereNumber('pesanan')->name('pesanan.batal');
+Route::get('/laporan', [LaporanController::class, 'index'])
+    ->name('laporan.index');
 Route::view('/kontak', 'kontak')->name('kontak');

@@ -27,3 +27,11 @@ Mengapa data tidak bertambah migrate:fresh --seed dijalankan dua kali? Karena pe
 1. Debugging 1 (total dari from): Kesalaannya adalah mengambil harga total dari input tersembunyi (<input type="hidden">) di form. Ini sangat berbahaya karena pengguna dapat memanipulasi nilainya lewat fitur Inspect Element?DevTools di browser, misalnya mengubah total belanja menjadi 1 rupiah. Perbaikannya adalah server wajib menghitung sendiri total harganya dari database (yaitu harga_satuan dikali jumlah)
 
 2. Debugging 2 (pengecekkan stok tanpa kunci): Kesalahannya adalah mengecek sisa tiket tanpa mengunci baris data di database. Ini berbahaya karena jika ada dua pembeli yang menekan tombol di waktu yang persis bersamaan, tiket bisa terjual melebihi batas stok(oversell). Perbaikannya adalah baris data konser harus dibaca dan dikunci menggunakan fungsi lockForUpdate() sebelum mengecek sisa stok.
+
+## Jawaban Latihan Debugging(Modul Laporan)
+Penyebab: isian dari form tanggal. hanya mengirimkan tanggal tanpa jam, sehingga sistem otomatis menganggapnya sebagai pukul 00:00:00. Sementara kolom created_at di database menyimpan tnaggal berserta jamnya misalnya 2026-11-12 14:30:00 karena 14:30 secra waktu lebih besar daripada 00:00, pesanan hari ini tidak memenuhi syarat <= dan tidak dimunculkan
+Perbaikan: Gunakan method whereDate daripada pakai where biasa. Method whereDate akan mengabaikan jam pada database dan memfokuskan perbandingan hanya pada format tanggalnya saja.
+->when($request->query('sampai'), function ($query, $sampai) {
+    $query->whereDate('created_at', '<=', $sampai);
+})
+'where' diubah menjadi 'whereDate'
