@@ -1,5 +1,6 @@
 <?php 
 
+use App\Http\Controllers\PesananController;
 use App\Http\Controllers\KonserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PromotorController;
@@ -41,4 +42,8 @@ Route::put('/promotor/{id}', [PromotorController::class, 'update'])
     ->name('promotor.update');
 Route::delete('/promotor/{id}', [PromotorController::class, 'destroy'])
     ->name('promotor.destroy');
+Route::get('/konser/{konser}/pesan', [PesananController::class, 'create'])
+    ->whereNumber('konser')->name('pesanan.create');
+Route::post('/konser/{konser}/pesan', [PesananController::class, 'store'])
+    ->whereNumber('konser')->name('pesanan.store');
 Route::view('/kontak', 'kontak')->name('kontak');

@@ -46,6 +46,6 @@ class DatabaseSeeder extends Seeder
             'harga' => 250000, 'sisa' => 60, 'tanggal' => '2027-01-30', 
         ]); 
         
-        $this->call(PesasnanSeeder::class);
+        $this->call(PesananSeeder::class);
     } 
 } 
