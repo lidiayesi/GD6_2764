@@ -45,5 +45,7 @@ class DatabaseSeeder extends Seeder
             'nama' => 'Malam Akustik Kota', 'kota' => 'Bandung', 
             'harga' => 250000, 'sisa' => 60, 'tanggal' => '2027-01-30', 
         ]); 
+        
+        $this->call(PesasnanSeeder::class);
     } 
 } 
