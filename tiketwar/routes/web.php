@@ -55,4 +55,6 @@ Route::patch('/pesanan/{pesanan}/batal', [PesananController::class, 'batal'])
     ->whereNumber('pesanan')->name('pesanan.batal');
 Route::get('/laporan', [LaporanController::class, 'index'])
     ->name('laporan.index');
+Route::get('/laporan/pdf', [LaporanController::class, 'pdf'])
+     ->name('laporan.pdf');
 Route::view('/kontak', 'kontak')->name('kontak');
