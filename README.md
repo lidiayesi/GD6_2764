@@ -86,3 +86,15 @@ Mengapa data tidak bertambah migrate:fresh --seed dijalankan dua kali? Karena pe
   3. Tanpa regenerasi session, aplikasi rentan terhadap serangan *session fixation* (penyerang memanfaatkan ID session lama korban).
 - **Perbaikan:**
   Validasi input dengan `$request->validate(...)`, verifikasi dengan `Auth::attempt($credentials)` serta satu pesan gagal yang sama (`Email atau kata sandi salah.`) disertai `onlyInput('email'`, lalu panggil `$request->session( ->regenerate()` sebelum `redirect()->intended(route('pesanan.index'))`.
+
+  ### Debugging 5: Tombol hilang, halaman tetap terbuka
+- **Kesalahan:**
+  Hanya menyembunyikan tombol "Tambah Konser" di sisi tampilan Blade dengan `@auth ... @endauth` tanpa memasang middleware `auth` pada route `konser.create` dan `konser.store` di
+  `routes/web.php`.
+- **Kenapa berbahaya:**
+  Menyembunyikan tombol di view hanyalah pengaturan tampilan (UI), bukan perlindungan keamanan Pengguna yang belum login tetap bisa mengakses `/konser/create` langsung lewat address bar browser atau mengirim request `POST /konser` ke server
+  untuk menambahkan data konser secara ilegal (*Broken Access Control*).
+- **Perbaikan:**
+  Lindungi seluruh route admin di sisi server dengan
+  memasukkannya ke dalam grup `Route::middleware('auth')->group(...)`
+  di `routes/web.php`, lalu periksa dengan `php artisan route:list -v` agar tidak ada route admin yang tertinggal di luar grup.
