@@ -41,3 +41,29 @@ Mengapa data tidak bertambah migrate:fresh --seed dijalankan dua kali? Karena pe
 - Peyebab: Layout layouts/main.blade.php memuat gaya Bootstrap dari link eksternl serta elemen khusus web seperti navbar dan footer. Paket pembuat pdf (dompdf) memiliki keterbatasan seperti tidak bisa mengandalkan file CSS eksternal secara stabil dan hanya mendukung CSS dasar versi 2.1 akibatnya seluruh gaya desain bootstrap gaagal dirender sehingga PDDF menjadi berantakan
 
 - Perbaikan: Hapus arahan @extends('layouts.main'), @section, beserta penutupnya dari file laporan-pdf.blade.php. Dokumen PDF harus dibuat sebagai file HTML yang berdiri sendiri tanpa layout bawaan web, lalu css ditulis secara manual dan sederhana langsung dalam tag <style> pada file tersebut.
+
+## Jawaban Latihan Debugging (Modul API dan autentikasi)
+
+### Debug 1: Pesanan dari semua isian
+- **Kesalahan**
+  Langsung menyimpan semua input mentah dari klien memakai 'Pesanan::create($request->all())' tanpa validasi dan tanpa memilih kolom, padahal 'harga_satuan', 'total', dan 'status' terdaftar di '$fillable' model 'Pesanan'
+- **Kenapa berbahaya**
+  Membuka celah manipulasi data (*mass assignment*). Penyerang bisa memalsukan `harga_satuan` dan `total` menjadi `1`, serta langsung mengubah `status` menjadi `lunas` tanpa membayar. Selain itu, pengecekan dan pengurangan stok juga terlewati.
+- **Perbaikan**
+  Validasi hanya kolom yang boleh diisi pelanggan (`nama_pemesan`, `email`, `jumlah`) memakai `$request->validate(...)`. Saat membuat pesanan, isi `harga_satuan`, `total` (dihitung server), dan `status` (`Pesanan::MENUNGGU_BAYAR`) secara eksplisit di dalam `DB::transaction` lengkap dengan `lockForUpdate()` dan `decrement('sisa')`.
+
+## Debug 2: Postman menerima HTML
+- **Kesalahan:**
+  Request ke endpoint API (`GET /api/user`) dikirim tanpa
+  menyertakan header `Accept: application/json`.
+- **Kenapa bermasalah:**
+  Laravel menebak jenis klien dari header `Accept`. Karena
+  header kosong, Laravel mengira klien adalah browser, sehingga
+  middleware `auth` mengalihkan (*redirect*) ke route `login`—
+  muncul error `Route [login] not defined` sebelum Bab 7, atau
+  mengembalikan halaman HTML login (status `200`) sesudah Bab 7.
+  Klien API akan gagal membaca balasan HTML tersebut.
+- **Perbaikan:**
+  Selalu kirim header `Accept: application/json` di setiap
+  request API agar Laravel otomatis membalas dengan JSON
+  `401 {"message": "Unauthenticated."}`.
