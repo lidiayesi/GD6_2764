@@ -67,3 +67,22 @@ Mengapa data tidak bertambah migrate:fresh --seed dijalankan dua kali? Karena pe
   Selalu kirim header `Accept: application/json` di setiap
   request API agar Laravel otomatis membalas dengan JSON
   `401 {"message": "Unauthenticated."}`.
+
+  ### Debugging 3: Login yang selalu 419
+- **Kesalahan:**
+  Form login menggunakan metode `POST` tanpa menyertakan direktif `@csrf` di dalam tag `<form>`.
+- **Kenapa berbahaya (dan kenapa tidak boleh mematikan CSRF):**
+  Laravel mewajibkan token CSRF pada setiap form `POST` untuk memastikan permintaan benar-benar berasal dari aplikasi sendiri.
+  Mematikan pemeriksaan CSRF sebagai jalan pintas sangat berbahaya karena membuka celah serangan *Cross-Site Request Forgery* (situs lain bisa memaksa browser pengguna mengirim permintaan berbahaya secara diam-diam).
+- **Perbaikan:**
+  Tambahkan direktif `@csrf` tepat di bawah tag pembuka `<form action="{{ route('login.proses') }}" method="POST">`.
+
+### Debugging 4: Login buatan sendiri
+- **Kesalahan:**
+  Tidak menggunakan `Auth::attempt()`, membandingkan password secara mentah (`$user->password !== $request->password`), tidak melakukan validasi input, memberi pesan error berbeda untuk email vs password, dan tidak memanggil `$request->session()->regenerate()` setelah login.
+- **Kenapa berbahaya:**
+  1. Perbandingan teks biasa menandakan kata sandi tidak disimpan dalam bentuk hash, sehingga mudah bocor jika database diretas.
+  2. Pesan error yang berbeda memudahkan penyerang menebak email mana yang terdaftar (*userenumeration*).
+  3. Tanpa regenerasi session, aplikasi rentan terhadap serangan *session fixation* (penyerang memanfaatkan ID session lama korban).
+- **Perbaikan:**
+  Validasi input dengan `$request->validate(...)`, verifikasi dengan `Auth::attempt($credentials)` serta satu pesan gagal yang sama (`Email atau kata sandi salah.`) disertai `onlyInput('email'`, lalu panggil `$request->session( ->regenerate()` sebelum `redirect()->intended(route('pesanan.index'))`.
